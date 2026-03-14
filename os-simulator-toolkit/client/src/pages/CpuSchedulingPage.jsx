@@ -200,32 +200,32 @@ function CpuSchedulingPage() {
               </div>
 
               {(() => {
-                const hasPriority = result.detailed?.[0]?.priority !== undefined;
+                const showPriority = algorithm.toUpperCase().startsWith('PRIORITY');
                 return (
                   <div
                     className={`data-list data-list--result ${
-                      hasPriority ? 'priority' : ''
+                      showPriority ? 'priority' : ''
                     }`}
                     style={{ marginTop: '1rem' }}
                   >
                     <div className="data-row data-row-header">
                       <span>Process</span>
-                      <span>Arrival</span>
-                      <span>Burst</span>
-                      {hasPriority && <span>Priority</span>}
-                      <span>Finish</span>
-                      <span>Waiting</span>
-                      <span>Turnaround</span>
+                      <span>Arrival Time</span>
+                      <span>Burst Time</span>
+                      {showPriority && <span>Priority</span>}
+                      <span>Completion Time</span>
+                      <span>Turnaround Time</span>
+                      <span>Waiting Time</span>
                     </div>
                     {result.detailed.map(p => (
                       <div className="data-row" key={p.id}>
                         <span>{p.id}</span>
                         <span>{p.arrivalTime}</span>
                         <span>{p.burstTime}</span>
-                        {hasPriority && <span>{p.priority}</span>}
+                        {showPriority && <span>{p.priority}</span>}
                         <span>{p.finishTime}</span>
-                        <span>{p.waitingTime}</span>
                         <span>{p.turnaroundTime}</span>
+                        <span>{p.waitingTime}</span>
                       </div>
                     ))}
                   </div>

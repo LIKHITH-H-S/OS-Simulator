@@ -249,8 +249,9 @@ html[data-theme='light'] .panel-divider {
 }
 
 .field textarea {
-  min-height: 70px;
+  min-height: 160px;
   resize: vertical;
+  overflow: hidden;
 }
 
 .btn-row {
@@ -284,10 +285,21 @@ html[data-theme='light'] .panel-divider {
 }
 
 .theme-toggle {
-  font-size: 0.8rem;
-  padding-inline: 0.9rem;
-  border: none;
-  background: transparent;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  background: rgba(255, 255, 255, 0.08);
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(148, 163, 184, 0.9);
 }
 
 .metrics-grid {
@@ -327,6 +339,7 @@ html[data-theme='light'] .error-msg {
 
 .table-scroll {
   width: 100%;
+  overflow: visible;
 }
 
 .data-list {

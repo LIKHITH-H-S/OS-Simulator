@@ -1,6 +1,9 @@
 import { diskFcfs } from '../../shared/disk/fcfs.js';
 import { diskSstf } from '../../shared/disk/sstf.js';
 import { diskScan } from '../../shared/disk/scan.js';
+import { diskCscan } from '../../shared/disk/cscan.js';
+import { diskLook } from '../../shared/disk/look.js';
+import { diskClook } from '../../shared/disk/clook.js';
 
 export function simulateDiskScheduling(req, res) {
   try {
@@ -27,6 +30,17 @@ export function simulateDiskScheduling(req, res) {
         break;
       case 'SCAN':
         result = diskScan(requests, head, direction || 'right');
+        break;
+      case 'C-SCAN':
+      case 'CSCAN':
+        result = diskCscan(requests, head, direction || 'right');
+        break;
+      case 'LOOK':
+        result = diskLook(requests, head, direction || 'right');
+        break;
+      case 'C-LOOK':
+      case 'CLOOK':
+        result = diskClook(requests, head, direction || 'right');
         break;
       default:
         return res.status(400).json({ error: `Unsupported algorithm: ${algorithm}` });

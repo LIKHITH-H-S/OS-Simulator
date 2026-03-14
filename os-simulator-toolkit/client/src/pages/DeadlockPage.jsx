@@ -80,8 +80,8 @@ function DeadlockPage() {
         inspect a safe sequence if one exists.
       </p>
 
-      <div className="layout-two-column">
-        <section className="panel">
+      <div className="layout-single">
+        <section className="panel panel--wide">
           <div className="panel-title">System State Input</div>
           <div className="panel-subtitle">
             Enter matrices row by row. Separate values with spaces; each line is a process.
@@ -119,17 +119,10 @@ function DeadlockPage() {
             </button>
           </div>
           {error && <div style={{ marginTop: '0.75rem', color: '#fca5a5' }}>{error}</div>}
-        </section>
-
-        <section className="panel">
-          <div className="panel-title">Result</div>
-          <div className="panel-subtitle">
-            See whether the system is in a safe state and review the computed need matrix.
-          </div>
 
           {result ? (
             <>
-              <div className="metrics-grid">
+              <div className="metrics-grid" style={{ marginTop: '1rem' }}>
                 <div className="metric-card">
                   <div className="metric-label">System Safety</div>
                   <div
@@ -176,7 +169,7 @@ function DeadlockPage() {
               </div>
             </>
           ) : (
-            <div className="list-muted">
+            <div className="list-muted" style={{ marginTop: '1rem' }}>
               Run the algorithm to see whether the current system state is safe.
             </div>
           )}

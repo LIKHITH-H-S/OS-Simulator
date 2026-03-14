@@ -16,6 +16,7 @@ function PageReplacementPage() {
   const [frameCount, setFrameCount] = useState(3);
   const [algorithm, setAlgorithm] = useState('FIFO');
   const [result, setResult] = useState(null);
+  const [showSteps, setShowSteps] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -24,6 +25,7 @@ function PageReplacementPage() {
     setFrameCount(3);
     setAlgorithm('FIFO');
     setResult(null);
+    setShowSteps(false);
     setError('');
   };
 
@@ -42,6 +44,7 @@ function PageReplacementPage() {
     } catch (e) {
       setError(e.response?.data?.error || 'Simulation failed.');
       setResult(null);
+      setShowSteps(false);
     } finally {
       setLoading(false);
     }
@@ -59,8 +62,8 @@ function PageReplacementPage() {
         Step through FIFO, LRU, and Optimal algorithms and inspect the frame table, faults, and hits.
       </p>
 
-      <div className="layout-two-column">
-        <section className="panel">
+      <div className="layout-single">
+        <section className="panel panel--wide">
           <div className="panel-title">Reference String</div>
           <div className="panel-subtitle">
             Enter page numbers separated by spaces or commas and choose the number of frames.
@@ -104,65 +107,68 @@ function PageReplacementPage() {
             </button>
           </div>
           {error && <div style={{ marginTop: '0.75rem', color: '#fca5a5' }}>{error}</div>}
-        </section>
-
-        <section className="panel">
-          <div className="panel-title">Frame Table &amp; Statistics</div>
-          <div className="panel-subtitle">
-            Watch how frames change over time and which references cause page faults.
-          </div>
 
           {result ? (
-            <>
-              <div className="metrics-grid">
-                <div className="metric-card">
-                  <div className="metric-label">Algorithm</div>
-                  <div className="metric-value">{result.algorithm}</div>
-                </div>
-                <div className="metric-card">
-                  <div className="metric-label">Page Faults</div>
-                  <div className="metric-value">{result.totalFaults}</div>
-                </div>
-                <div className="metric-card">
-                  <div className="metric-label">Page Hits</div>
-                  <div className="metric-value">{result.totalHits}</div>
-                </div>
+            <div style={{ marginTop: '1.25rem' }}>
+              <div className="metric-card" style={{ marginBottom: '0.75rem' }}>
+                <div className="metric-label">Algorithm</div>
+                <div className="metric-value">{result.algorithm}</div>
+              </div>
+              <div className="metric-card" style={{ marginBottom: '0.75rem' }}>
+                <div className="metric-label">Page Faults</div>
+                <div className="metric-value">{result.totalFaults}</div>
+              </div>
+              <div className="metric-card" style={{ marginBottom: '0.75rem' }}>
+                <div className="metric-label">Page Hits</div>
+                <div className="metric-value">{result.totalHits}</div>
               </div>
 
-              <div className="table-scroll" style={{ marginTop: '1rem' }}>
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Step</th>
-                      <th>Reference</th>
-                      {Array.from({ length: frameColumns }).map((_, idx) => (
-                        <th key={idx}>Frame {idx}</th>
-                      ))}
-                      <th>Hit / Fault</th>
-                      <th>Victim</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {result.steps.map(step => (
-                      <tr key={step.index}>
-                        <td>{step.index + 1}</td>
-                        <td>{step.reference}</td>
-                        {Array.from({ length: frameColumns }).map((_, idx) => (
-                          <td key={idx}>{step.frames[idx] ?? '-'}</td>
-                        ))}
-                        <td style={{ color: step.hit ? '#4ade80' : '#f97316' }}>
-                          {step.hit ? 'Hit' : 'Fault'}
-                        </td>
-                        <td>{step.victim ?? '-'}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div className="btn-row" style={{ marginTop: '1rem' }}>
+                <button
+                  className="btn btn-ghost"
+                  type="button"
+                  onClick={() => setShowSteps(prev => !prev)}
+                >
+                  {showSteps ? 'Hide' : 'Show'} step-by-step table
+                </button>
               </div>
-            </>
+
+              {showSteps && (
+                <div className="table-scroll" style={{ marginTop: '1rem' }}>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Step</th>
+                        <th>Reference</th>
+                        {Array.from({ length: frameColumns }).map((_, idx) => (
+                          <th key={idx}>Frame {idx}</th>
+                        ))}
+                        <th>Hit / Fault</th>
+                        <th>Victim</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {result.steps.map(step => (
+                        <tr key={step.index}>
+                          <td>{step.index + 1}</td>
+                          <td>{step.reference}</td>
+                          {Array.from({ length: frameColumns }).map((_, idx) => (
+                            <td key={idx}>{step.frames[idx] ?? '-'}</td>
+                          ))}
+                          <td style={{ color: step.hit ? '#4ade80' : '#f97316' }}>
+                            {step.hit ? 'Hit' : 'Fault'}
+                          </td>
+                          <td>{step.victim ?? '-'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
           ) : (
-            <div className="list-muted">
-              Run a simulation to see the evolving frame table and statistics.
+            <div className="list-muted" style={{ marginTop: '1rem' }}>
+              Run a simulation to see the results.
             </div>
           )}
         </section>

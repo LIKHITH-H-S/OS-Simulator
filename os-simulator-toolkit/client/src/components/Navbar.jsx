@@ -48,8 +48,9 @@ function Navbar() {
             className="theme-toggle btn-ghost"
             onClick={toggleTheme}
             aria-label="Toggle theme"
+            title="Toggle light/dark theme"
           >
-            {theme === 'dark' ? '◑' : '◐'}
+            {theme === 'dark' ? '🌙 Dark' : '☀️ Light'}
           </button>
         </div>
       </div>

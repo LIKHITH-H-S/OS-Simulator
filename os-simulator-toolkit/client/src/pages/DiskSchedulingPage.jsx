@@ -55,11 +55,11 @@ function DiskSchedulingPage() {
     <div>
       <h2 className="page-title">Disk Scheduling Simulator</h2>
       <p className="page-subtitle">
-        Visualize disk head movement for FCFS, SSTF, and SCAN and compare total seek times.
+        Visualize disk head movement for FCFS, SSTF, SCAN, C-SCAN, LOOK, and C-LOOK and compare total seek times.
       </p>
 
-      <div className="layout-two-column">
-        <section className="panel">
+      <div className="layout-single">
+        <section className="panel panel--wide">
           <div className="panel-title">Request Queue</div>
           <div className="panel-subtitle">
             Enter cylinder requests and the initial head position, then select a scheduling policy.
@@ -89,11 +89,14 @@ function DiskSchedulingPage() {
                 <option value="FCFS">FCFS</option>
                 <option value="SSTF">SSTF</option>
                 <option value="SCAN">SCAN</option>
+                <option value="C-SCAN">C-SCAN</option>
+                <option value="LOOK">LOOK</option>
+                <option value="C-LOOK">C-LOOK</option>
               </select>
             </div>
-            {algorithm === 'SCAN' && (
+            {['SCAN', 'C-SCAN', 'LOOK', 'C-LOOK'].includes(algorithm) && (
               <div className="field">
-                <label>SCAN Direction</label>
+                <label>Direction</label>
                 <select value={direction} onChange={e => setDirection(e.target.value)}>
                   <option value="right">Towards higher cylinders</option>
                   <option value="left">Towards lower cylinders</option>
@@ -111,50 +114,50 @@ function DiskSchedulingPage() {
             </button>
           </div>
           {error && <div style={{ marginTop: '0.75rem', color: '#fca5a5' }}>{error}</div>}
-        </section>
 
-        <section className="panel">
-          <div className="panel-title">Head Movement &amp; Seek Time</div>
-          <div className="panel-subtitle">
-            Inspect the order in which requests are served and the resulting total head movement.
-          </div>
-
-          {result ? (
-            <>
-              <div className="metrics-grid">
-                <div className="metric-card">
-                  <div className="metric-label">Algorithm</div>
-                  <div className="metric-value">{result.algorithm}</div>
-                </div>
-                <div className="metric-card">
-                  <div className="metric-label">Total Seek Time</div>
-                  <div className="metric-value">{result.totalSeekTime}</div>
-                </div>
-                <div className="metric-card">
-                  <div className="metric-label">Path Length</div>
-                  <div className="metric-value">{result.path.length}</div>
-                </div>
-              </div>
-
-              <div style={{ marginTop: '1rem' }}>
-                <div className="chip">Head Path (chart)</div>
-                <div style={{ marginTop: '0.5rem' }}>
-                  <DiskHeadChart path={result.path} />
-                </div>
-              </div>
-
-              <div style={{ marginTop: '1rem' }}>
-                <div className="chip">Head Movement Order</div>
-                <p className="list-muted" style={{ marginTop: '0.4rem' }}>
-                  {result.path.join(' → ')}
-                </p>
-              </div>
-            </>
-          ) : (
-            <div className="list-muted">
-              Run a simulation to see disk head movement and total seek time.
+          <div style={{ marginTop: '1.5rem' }}>
+            <div className="panel-title">Head Movement &amp; Seek Time</div>
+            <div className="panel-subtitle">
+              Inspect the order in which requests are served and the resulting total head movement.
             </div>
-          )}
+
+            {result ? (
+              <>
+                <div className="metrics-grid" style={{ marginTop: '1rem' }}>
+                  <div className="metric-card">
+                    <div className="metric-label">Algorithm</div>
+                    <div className="metric-value">{result.algorithm}</div>
+                  </div>
+                  <div className="metric-card">
+                    <div className="metric-label">Total Seek Time</div>
+                    <div className="metric-value">{result.totalSeekTime}</div>
+                  </div>
+                  <div className="metric-card">
+                    <div className="metric-label">Path Length</div>
+                    <div className="metric-value">{result.path.length}</div>
+                  </div>
+                </div>
+
+                <div style={{ marginTop: '1rem' }}>
+                  <div className="chip">Head Path (chart)</div>
+                  <div style={{ marginTop: '0.5rem' }}>
+                    <DiskHeadChart path={result.path} />
+                  </div>
+                </div>
+
+                <div style={{ marginTop: '1rem' }}>
+                  <div className="chip">Head Movement Order</div>
+                  <p className="list-muted" style={{ marginTop: '0.4rem' }}>
+                    {result.path.join(' → ')}
+                  </p>
+                </div>
+              </>
+            ) : (
+              <div className="list-muted" style={{ marginTop: '1rem' }}>
+                Run a simulation to see disk head movement and total seek time.
+              </div>
+            )}
+          </div>
         </section>
       </div>
     </div>
