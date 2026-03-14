@@ -56,7 +56,13 @@ function CpuSchedulingPage() {
       const res = await axios.post('/api/cpu/simulate', payload);
       setResult(res.data);
     } catch (e) {
-      setError(e.response?.data?.error || 'Simulation failed.');
+      const message =
+        e.response?.data?.error ||
+        e.response?.data?.message ||
+        e.message ||
+        'Simulation failed.';
+      setError(message);
+      console.error('Simulation error:', e);
       setResult(null);
     } finally {
       setLoading(false);
