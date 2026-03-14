@@ -331,6 +331,7 @@ html[data-theme='light'] .error-msg {
 
 .data-list {
   width: 100%;
+  overflow-x: auto;
 }
 
 .data-row {
@@ -364,7 +365,11 @@ html[data-theme='light'] .error-msg {
 }
 
 .data-list--result .data-row {
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(6, minmax(90px, 1fr));
+}
+
+.data-list--result.priority .data-row {
+  grid-template-columns: repeat(7, minmax(90px, 1fr));
 }
 
 .data-row input {
