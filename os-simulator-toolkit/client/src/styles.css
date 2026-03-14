@@ -429,6 +429,30 @@ tbody tr:nth-child(even) {
   font-weight: 600;
 }
 
+.gantt-time-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.35rem;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.gantt-time-label {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 0.2rem;
+}
+
+.gantt-time-label-start {
+  text-align: left;
+}
+
+.gantt-time-label-end {
+  text-align: right;
+}
+
 /* Light theme overrides */
 
 html[data-theme='light'] .navbar {

@@ -24,8 +24,20 @@ function GanttChart({ timeline }) {
         })}
       </div>
       <div className="gantt-time-labels">
-        <span>{min}</span>
-        <span>{max}</span>
+        {timeline.map((slot, idx) => {
+          const widthPct = ((slot.end - slot.start) / total) * 100;
+          const isLast = idx === timeline.length - 1;
+          return (
+            <span
+              key={`${slot.processId}-label-${idx}`}
+              className="gantt-time-label"
+              style={{ width: `${widthPct}%` }}
+            >
+              <span className="gantt-time-label-start">{slot.start}</span>
+              {isLast && <span className="gantt-time-label-end">{slot.end}</span>}
+            </span>
+          );
+        })}
       </div>
     </div>
   );

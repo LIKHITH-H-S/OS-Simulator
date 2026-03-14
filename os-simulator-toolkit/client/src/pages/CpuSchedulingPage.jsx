@@ -199,28 +199,38 @@ function CpuSchedulingPage() {
                 </div>
               </div>
 
-              <div className="data-list data-list--result" style={{ marginTop: '1rem' }}>
-                <div className="data-row data-row-header">
-                  <span>Process</span>
-                  <span>Arrival</span>
-                  <span>Burst</span>
-                  {result.detailed[0]?.priority !== undefined && <span>Priority</span>}
-                  <span>Finish</span>
-                  <span>Waiting</span>
-                  <span>Turnaround</span>
-                </div>
-                {result.detailed.map(p => (
-                  <div className="data-row" key={p.id}>
-                    <span>{p.id}</span>
-                    <span>{p.arrivalTime}</span>
-                    <span>{p.burstTime}</span>
-                    {p.priority !== undefined && <span>{p.priority}</span>}
-                    <span>{p.finishTime}</span>
-                    <span>{p.waitingTime}</span>
-                    <span>{p.turnaroundTime}</span>
+              {(() => {
+                const hasPriority = result.detailed?.[0]?.priority !== undefined;
+                return (
+                  <div
+                    className={`data-list data-list--result ${
+                      hasPriority ? 'priority' : ''
+                    }`}
+                    style={{ marginTop: '1rem' }}
+                  >
+                    <div className="data-row data-row-header">
+                      <span>Process</span>
+                      <span>Arrival</span>
+                      <span>Burst</span>
+                      {hasPriority && <span>Priority</span>}
+                      <span>Finish</span>
+                      <span>Waiting</span>
+                      <span>Turnaround</span>
+                    </div>
+                    {result.detailed.map(p => (
+                      <div className="data-row" key={p.id}>
+                        <span>{p.id}</span>
+                        <span>{p.arrivalTime}</span>
+                        <span>{p.burstTime}</span>
+                        {hasPriority && <span>{p.priority}</span>}
+                        <span>{p.finishTime}</span>
+                        <span>{p.waitingTime}</span>
+                        <span>{p.turnaroundTime}</span>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                );
+              })()}
             </>
           )}
         </section>
