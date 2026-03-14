@@ -3,10 +3,10 @@ import axios from 'axios';
 import GanttChart from '../components/GanttChart';
 
 const SAMPLE_PROCESSES = [
-  { id: 'P1', arrivalTime: 0, burstTime: 7 },
-  { id: 'P2', arrivalTime: 2, burstTime: 4 },
-  { id: 'P3', arrivalTime: 4, burstTime: 1 },
-  { id: 'P4', arrivalTime: 5, burstTime: 4 }
+  { id: 'P1', arrivalTime: 0, burstTime: 7, priority: 0 },
+  { id: 'P2', arrivalTime: 2, burstTime: 4, priority: 1 },
+  { id: 'P3', arrivalTime: 4, burstTime: 1, priority: 2 },
+  { id: 'P4', arrivalTime: 5, burstTime: 4, priority: 1 }
 ];
 
 function CpuSchedulingPage() {
@@ -24,7 +24,7 @@ function CpuSchedulingPage() {
 
   const addProcess = () => {
     const id = `P${processes.length + 1}`;
-    setProcesses([...processes, { id, arrivalTime: 0, burstTime: 1 }]);
+    setProcesses([...processes, { id, arrivalTime: 0, burstTime: 1, priority: 0 }]);
   };
 
   const removeProcess = index => {
@@ -47,7 +47,8 @@ function CpuSchedulingPage() {
         processes: processes.map(p => ({
           id: p.id,
           arrivalTime: Number(p.arrivalTime),
-          burstTime: Number(p.burstTime)
+          burstTime: Number(p.burstTime),
+          priority: Number(p.priority ?? 0)
         })),
         algorithm,
         timeQuantum: Number(timeQuantum)
@@ -66,7 +67,7 @@ function CpuSchedulingPage() {
     <div>
       <h2 className="page-title">CPU Scheduling Simulator</h2>
       <p className="page-subtitle">
-        Compare FCFS, SJF, and Round Robin by exploring how processes are ordered on the CPU.
+        Compare FCFS, SJF, SRTF, Round Robin, and Priority scheduling by exploring how processes are ordered on the CPU.
       </p>
 
       <div className="layout-single">
@@ -82,7 +83,10 @@ function CpuSchedulingPage() {
               <select value={algorithm} onChange={e => setAlgorithm(e.target.value)}>
                 <option value="FCFS">FCFS (First-Come, First-Served)</option>
                 <option value="SJF">SJF (Shortest Job First)</option>
+                <option value="SRTF">SRTF (Shortest Remaining Time First)</option>
                 <option value="RR">Round Robin</option>
+                <option value="PRIORITY_NON_PREEMPTIVE">Priority (Non-Preemptive)</option>
+                <option value="PRIORITY_PREEMPTIVE">Priority (Preemptive)</option>
               </select>
             </div>
             {algorithm === 'RR' && (
@@ -98,11 +102,15 @@ function CpuSchedulingPage() {
             )}
           </div>
 
-          <div className="data-list data-list--process" style={{ marginTop: '0.9rem' }}>
+          <div
+            className={`data-list data-list--process ${algorithm.startsWith('PRIORITY') ? 'priority' : ''}`}
+            style={{ marginTop: '0.9rem' }}
+          >
             <div className="data-row data-row-header">
               <span>Process ID</span>
               <span>Arrival Time</span>
               <span>Burst Time</span>
+              {algorithm.startsWith('PRIORITY') && <span>Priority</span>}
               <span />
             </div>
             {processes.map((p, index) => (
@@ -124,6 +132,14 @@ function CpuSchedulingPage() {
                   value={p.burstTime}
                   onChange={e => updateProcess(index, 'burstTime', e.target.value)}
                 />
+                {algorithm.startsWith('PRIORITY') && (
+                  <input
+                    type="number"
+                    min="0"
+                    value={p.priority ?? 0}
+                    onChange={e => updateProcess(index, 'priority', e.target.value)}
+                  />
+                )}
                 <button
                   className="btn btn-ghost"
                   type="button"
@@ -182,6 +198,7 @@ function CpuSchedulingPage() {
                   <span>Process</span>
                   <span>Arrival</span>
                   <span>Burst</span>
+                  {result.detailed[0]?.priority !== undefined && <span>Priority</span>}
                   <span>Finish</span>
                   <span>Waiting</span>
                   <span>Turnaround</span>
@@ -191,6 +208,7 @@ function CpuSchedulingPage() {
                     <span>{p.id}</span>
                     <span>{p.arrivalTime}</span>
                     <span>{p.burstTime}</span>
+                    {p.priority !== undefined && <span>{p.priority}</span>}
                     <span>{p.finishTime}</span>
                     <span>{p.waitingTime}</span>
                     <span>{p.turnaroundTime}</span>
