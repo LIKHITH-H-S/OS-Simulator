@@ -1,0 +1,7 @@
+[build]
+  base = "os-simulator-toolkit/client"
+  publish = "build"
+  command = "npm install && npm run build"
+
+[context.production.environment]
+  REACT_APP_API_URL = "https://os-simulator-1.onrender.com"

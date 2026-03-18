@@ -2,6 +2,7 @@
   "name": "os-simulator-toolkit",
   "private": true,
   "version": "1.0.0",
+  "type": "module",
   "description": "OS Simulator Toolkit - an educational platform to visualize classic operating system algorithms.",
   "scripts": {
     "dev": "npm-run-all --parallel dev:client dev:server",
