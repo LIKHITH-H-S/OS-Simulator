@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const SAMPLE_REF = '7 0 1 2 0 3 0 4 2 3 0 3 2';
 
@@ -39,7 +39,7 @@ function PageReplacementPage() {
         frameCount: Number(frameCount),
         algorithm
       };
-      const res = await axios.post('/api/page-replacement/simulate', payload);
+      const res = await api.post('/api/page-replacement/simulate', payload);
       setResult(res.data);
     } catch (e) {
       setError(e.response?.data?.error || 'Simulation failed.');

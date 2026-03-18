@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const SAMPLE_ALLOCATION = `0 1 0
 2 0 0
@@ -62,7 +62,7 @@ function DeadlockPage() {
       const available = parseVector(availableText);
 
       const payload = { allocation, maximum, available };
-      const res = await axios.post('/api/deadlock/simulate', payload);
+      const res = await api.post('/api/deadlock/simulate', payload);
       setResult(res.data);
     } catch (e) {
       setError(e.response?.data?.error || 'Simulation failed.');

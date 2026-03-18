@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 import GanttChart from '../components/GanttChart';
 
 const SAMPLE_PROCESSES = [
@@ -53,7 +53,7 @@ function CpuSchedulingPage() {
         algorithm,
         timeQuantum: Number(timeQuantum)
       };
-      const res = await axios.post('/api/cpu/simulate', payload);
+      const res = await api.post('/api/cpu/simulate', payload);
       setResult(res.data);
     } catch (e) {
       const message =

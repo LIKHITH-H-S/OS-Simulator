@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 import DiskHeadChart from '../components/DiskHeadChart';
 
 const SAMPLE_QUEUE = '82 170 43 140 24 16 190';
@@ -41,7 +41,7 @@ function DiskSchedulingPage() {
         algorithm,
         direction
       };
-      const res = await axios.post('/api/disk/simulate', payload);
+      const res = await api.post('/api/disk/simulate', payload);
       setResult(res.data);
     } catch (e) {
       setError(e.response?.data?.error || 'Simulation failed.');
